@@ -39,6 +39,7 @@ class CommentableTests extends GrailsUnitTestCase {
 		entry.addComment poster, "My comment"
 		
 		assertEquals 1, entry.comments.size()
+		assertEquals 1, entry.totalComments
 		
 		def c = entry.comments[0]
 		
