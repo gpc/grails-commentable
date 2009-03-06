@@ -13,17 +13,20 @@
  * limitations under the License.
  */
 import org.grails.comments.*
+import grails.util.*
 
 class CommentableGrailsPlugin {
     // the plugin version
-    def version = "0.1"
+    def version = "0.2"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.1 > *"
     // the other plugins this plugin depends on
     def dependsOn = [hibernate:"1.1 > *"]
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
+            "grails-app/views/test/index.gsp",
             "grails-app/views/error.gsp",
+            "grails-app/controllers/TestController.groovy",
 			"grails-app/domain/org/grails/comments/TestPoster.groovy",
 			"grails-app/domain/org/grails/comments/TestEntry.groovy"			
     ]
@@ -37,7 +40,13 @@ A plugin that allows you to attach comments to domain classes in a generic manne
     // URL to the plugin's documentation
     def documentation = "http://grails.org/Commentable+Plugin"
 
-
+	def doWithSpring = {
+		def config = application.config
+		
+		if(!config.grails.commentable.poster.evaluator) {
+			config.grails.commentable.poster.evaluator = { request.user }
+		}
+	}
     def doWithDynamicMethods = { ctx ->
 		for(domainClass in application.domainClasses) {
 			if(Commentable.class.isAssignableFrom(domainClass.clazz)) {
@@ -49,7 +58,7 @@ A plugin that allows you to attach comments to domain classes in a generic manne
 							throw new CommentException("Cannot create comment for arguments [$poster, $text], they are invalid.")
 						}
 						c.save()
-						def link = new CommentLink(comment:c, commentRef:delegate.id, commentClass:delegate.class.name)
+						def link = new CommentLink(comment:c, commentRef:delegate.id, type:GrailsNameUtils.getPropertyName(delegate.class))
 						link.save()
 						return delegate
 					}
@@ -63,7 +72,7 @@ A plugin that allows you to attach comments to domain classes in a generic manne
 									property "comment"
 								}
 								eq "commentRef", instance.id
-								eq 'commentClass', instance.class.name
+								eq 'type', GrailsNameUtils.getPropertyName(instance.class)
 								cache true
 							}							
 						} else {

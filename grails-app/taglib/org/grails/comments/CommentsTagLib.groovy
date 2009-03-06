@@ -14,19 +14,27 @@
  */
 package org.grails.comments
 
-class CommentLink {
+class CommentsTagLib {
 
-	static belongsTo = [comment:Comment]
+	static namespace = "comments"
 	
-	Long commentRef
-	String type
+	def each =  { attrs, body ->
+		def bean = attrs.bean
+		def varName = attrs.var ?: "comment"
+		if(bean?.metaClass?.hasProperty(bean, "comments")) {
+			bean.comments?.each {
+				out << body((varName):it)
+			}
+		}
+	}
 	
-	static constraints = {
-		commentRef min:0L
-		type blank:false
+	def render =  { attrs, body ->
+		def bean = attrs.bean
+		def noEscape = attrs.containsKey('noEscape') ? attrs.noEscape : false
+		
+		if(bean?.metaClass?.hasProperty(bean, "comments")) {
+			out << g.render(template:"/comments/comments", plugin:"commentable", model:[commentable:bean, noEscape:noEscape])
+		}		
 	}
 
-	static mapping = {
-		cache true
-	}
 }
