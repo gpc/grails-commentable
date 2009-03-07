@@ -1,6 +1,6 @@
 <g:set var="comments" value="${commentable.comments}"></g:set>
-<div id="comments" class="comments">
-	<g:render template="/comments/comment" 
+<div id="comments" class="commentable">
+	<g:render template="/commentable/comment" 
 			  collection="${comments}" 
 			  var="comment" 
 			  plugin="commentable" 
