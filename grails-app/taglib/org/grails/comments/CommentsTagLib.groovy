@@ -32,6 +32,9 @@ class CommentsTagLib {
 		def bean = attrs.bean
 		def noEscape = attrs.containsKey('noEscape') ? attrs.noEscape : false
 		
+		plugin.isAvailable(name:"grails-ui") {
+			noEscape = true
+		}
 		if(bean?.metaClass?.hasProperty(bean, "comments")) {
 			out << g.render(template:"/commentable/comments", plugin:"commentable", model:[commentable:bean, noEscape:noEscape])
 		}		

@@ -4,7 +4,7 @@
 			  collection="${comments}" 
 			  var="comment" 
 			  plugin="commentable" 
-			  noEscape="${noEscape}" />
+			  model="[noEscape:noEscape]" />
 </div>
 <div id="addComment" class="addComment">
 	<h1 class="addCommentTitle"><g:message code="comment.add.title" default="Post a Comment"></g:message></h1>
@@ -13,7 +13,12 @@
 	</div>
 	<div id="addCommentContainer" class="addCommentContainer">
 		<g:formRemote name="addCommentForm" url="[controller:'commentable',action:'add']" update="comments">
-			<g:textArea id="commentBody" name="comment.body" /> <br />
+			<plugin:isAvailable name="grails-ui">
+				<gui:richEditor id='commentBody' name="comment.body" value='' />
+			</plugin:isAvailable>
+			<plugin:isNotAvailable name="grails-ui">
+				<g:textArea id="commentBody" name="comment.body" /> <br />
+			</plugin:isNotAvailable>
 			<g:hiddenField name="update" value="comments" />			
 			<g:hiddenField name="commentLink.commentRef" value="${commentable.id}" />
 			<g:hiddenField name="commentLink.type" value="${commentable.class.name}" />			
