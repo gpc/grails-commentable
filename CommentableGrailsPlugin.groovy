@@ -17,7 +17,7 @@ import grails.util.*
 
 class CommentableGrailsPlugin {
     // the plugin version
-    def version = "0.6"
+    def version = "0.7"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.1 > *"
     // the other plugins this plugin depends on
@@ -51,6 +51,21 @@ A plugin that allows you to attach comments to domain classes in a generic manne
 		for(domainClass in application.domainClasses) {
 			if(Commentable.class.isAssignableFrom(domainClass.clazz)) {
 				domainClass.clazz.metaClass {
+					'static' {
+						getRecentComments {->
+							def clazz = delegate
+							CommentLink.withCriteria {
+								projections { property "comment" }
+								eq 'type',GrailsNameUtils.getPropertyName(clazz)								
+								maxResults 5
+								cache true
+								comment {
+									order "dateCreated", "desc"
+								}
+							}
+						}
+					}
+					
 					addComment { poster, String text ->
 						if(delegate.id == null) throw new CommentException("You must save the entity [${delegate}] before calling addComment")
 						def c = new Comment(body:text, posterId:poster.id, posterClass:poster.class.name)

@@ -34,4 +34,23 @@ class CommentsTagLibTests extends GroovyPagesTestCase {
 		
 		assertOutputEquals "", template, [bean:entry]		
     }
+
+
+	void testEachRecent() {
+		def poster = new TestPoster(name:"fred")
+		poster.save()
+		
+		def entry = new TestEntry(title:"The Entry")
+		shouldFail(CommentException) {
+			entry.addComment(poster, "My comment")			
+		}
+
+		entry.save()
+		
+		entry.addComment poster, "one."
+		entry.addComment poster, "two."	
+		
+		def template = '<comments:eachRecent domain="${domain}">${comment.body}</comments:eachRecent>'			
+		assertOutputEquals "two.one.", template, [domain:TestEntry]		
+	}
 }

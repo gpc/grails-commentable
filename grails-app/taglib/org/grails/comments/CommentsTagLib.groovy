@@ -28,6 +28,18 @@ class CommentsTagLib {
 		}
 	}
 	
+	def eachRecent = { attrs, body ->
+		def domain = attrs.domain
+		if(!domain && attrs.bean) domain = attrs.bean?.class
+		def varName = attrs.var ?: "comment"
+				
+		if(domain) {
+			domain.recentComments?.each {
+				out << body((varName):it)				
+			}
+		}
+	}
+	
 	def render =  { attrs, body ->
 		def bean = attrs.bean
 		def noEscape = attrs.containsKey('noEscape') ? attrs.noEscape : false

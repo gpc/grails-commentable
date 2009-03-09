@@ -14,7 +14,7 @@
 	<div id="addCommentContainer" class="addCommentContainer">
 		<g:formRemote name="addCommentForm" url="[controller:'commentable',action:'add']" update="comments">
 			<plugin:isAvailable name="grails-ui">
-				<gui:richEditor id='commentBody' name="comment.body" value='' width="625px" />
+				<gui:richEditor id='commentBody' name="comment.body" value='' width="100%" />
 			</plugin:isAvailable>
 			<plugin:isNotAvailable name="grails-ui">
 				<g:textArea id="commentBody" name="comment.body" /> <br />

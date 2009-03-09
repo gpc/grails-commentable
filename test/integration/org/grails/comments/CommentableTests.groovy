@@ -93,4 +93,26 @@ class CommentableTests extends GrailsUnitTestCase {
 		
 		assertEquals 1, Comment.countByPoster(poster)
 	}
+	
+	void testGetRecentComments() {
+		def poster = new TestPoster(name:"fred")
+		poster.save()
+
+		def entry = new TestEntry(title:"The Entry")
+		shouldFail(CommentException) {
+			entry.addComment(poster, "My comment")			
+		}
+
+		entry.save()
+
+		entry.addComment poster, "one"
+		entry.addComment poster, "two"
+		entry.addComment poster, "three"				
+
+		assertEquals 3, entry.comments.size()
+		
+		def recent = TestEntry.recentComments
+		assertEquals 3, recent.size()
+		assertEquals "three", recent[0].body
+	}
 }
