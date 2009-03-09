@@ -7,11 +7,16 @@
 			  model="[noEscape:noEscape]" />
 </div>
 <div id="addComment" class="addComment">
-	<h1 class="addCommentTitle"><g:message code="comment.add.title" default="Post a Comment"></g:message></h1>
-	<div class="addCommentDescription">
-		<g:message code="comment.add.description" default=""></g:message>
-	</div>
-	<div id="addCommentContainer" class="addCommentContainer">
+	<h2 class="addCommentTitle">
+		<a href="#commentEditor" onclick="document.getElementById('addCommentContainer').style.display='';">
+			<g:message code="comment.add.title" default="Post a Comment"></g:message>
+		</a>
+	</h2>
+	<div id="addCommentContainer" class="addCommentContainer" style="display:none;">
+		<div class="addCommentDescription">
+			<g:message code="comment.add.description" default=""></g:message>
+		</div>
+		<a name="commentEditor" />
 		<g:formRemote name="addCommentForm" url="[controller:'commentable',action:'add']" update="comments">
 			<plugin:isAvailable name="grails-ui">
 				<gui:richEditor id='commentBody' name="comment.body" value='' width="100%" />

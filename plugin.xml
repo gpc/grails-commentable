@@ -1,4 +1,4 @@
-<plugin name='commentable' version='0.7' grailsVersion='1.1 &gt; *'>
+<plugin name='commentable' version='0.7.1' grailsVersion='1.1 &gt; *'>
   <author>Graeme Rocher</author>
   <authorEmail>graeme.rocher@springsource.com</authorEmail>
   <title>Commentable Plugin</title>
