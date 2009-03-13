@@ -17,7 +17,7 @@ import grails.util.*
 
 class CommentableGrailsPlugin {
     // the plugin version
-    def version = "0.7.2"
+    def version = "0.7.3"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.1 > *"
     // the other plugins this plugin depends on
@@ -75,9 +75,11 @@ A plugin that allows you to attach comments to domain classes in a generic manne
 						c.save()
 						def link = new CommentLink(comment:c, commentRef:delegate.id, type:GrailsNameUtils.getPropertyName(delegate.class))
 						link.save()
+						try {
+						    delegate.onAddComment(c)
+						} catch (MissingMethodException e) {}
 						return delegate
 					}
-
 
 					getComments = {->
 						def instance = delegate

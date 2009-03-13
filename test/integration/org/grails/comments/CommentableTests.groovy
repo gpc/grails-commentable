@@ -115,4 +115,24 @@ class CommentableTests extends GrailsUnitTestCase {
 		assertEquals 3, recent.size()
 		assertEquals "three", recent[0].body
 	}
+
+    void testOnAddComment() {
+        def poster = new TestPoster(name:"fred")
+		poster.save()
+
+		def entry = new TestEntry(title:"The Entry")
+		
+		def onAddCommentCalled = false
+		entry.metaClass.onAddComment = { comment -> 
+		    onAddCommentCalled = true
+		    assertEquals poster, comment.poster
+		    assertEquals "My comment", comment.body
+		}
+        
+		entry.save()
+
+		entry.addComment poster, "My comment"
+
+        assertTrue "onAddComment() was never called", onAddCommentCalled
+    }
 }
