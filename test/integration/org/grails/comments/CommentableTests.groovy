@@ -25,6 +25,15 @@ class CommentableTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 
+	void testProxiedClassNames() {
+		def poster = new TestPoster(name:"fred")
+		poster.save()
+
+		def c = new Comment(body:"test", posterId:poster.id, posterClass:"org.grails.comments.TestPoster_\$\$_javassist_7")
+		
+		assertNotNull c.poster
+		assertEquals poster.id, c.poster.id
+	}
     void testAddComment() {
 		def poster = new TestPoster(name:"fred")
 		poster.save()

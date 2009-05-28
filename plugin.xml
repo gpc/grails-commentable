@@ -1,4 +1,4 @@
-<plugin name='commentable' version='0.7.3' grailsVersion='1.1 &gt; *'>
+<plugin name='commentable' version='0.7.4' grailsVersion='1.1 &gt; *'>
   <author>Graeme Rocher</author>
   <authorEmail>graeme.rocher@springsource.com</authorEmail>
   <title>Commentable Plugin</title>
@@ -15,7 +15,6 @@ A plugin that allows you to attach comments to domain classes in a generic manne
     <resource>org.grails.comments.CommentLink</resource>
     <resource>org.grails.comments.TestEntry</resource>
     <resource>org.grails.comments.TestPoster</resource>
-    <resource>org.grails.comments.CommentableService</resource>
     <resource>org.grails.comments.CommentsTagLib</resource>
   </resources>
   <dependencies>

@@ -23,6 +23,10 @@ class Comment {
 	String posterClass
 	
 	def getPoster() {
+		// handle proxied class names
+		def i = posterClass.indexOf('_$$_javassist')
+		if(i>-1)
+			posterClass = posterClass[0..i-1]
 		getClass().classLoader.loadClass(posterClass).get(posterId)
 	}	
 	
