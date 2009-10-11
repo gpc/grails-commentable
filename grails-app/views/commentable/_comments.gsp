@@ -16,7 +16,7 @@
 		<div class="addCommentDescription">
 			<g:message code="comment.add.description" default=""></g:message>
 		</div>
-		<a name="commentEditor" />
+		<a name="commentEditor"></a>
 		<g:formRemote name="addCommentForm" url="[controller:'commentable',action:'add']" update="comments">
 			<plugin:isAvailable name="grails-ui">
 				<gui:richEditor id='commentBody' name="comment.body" value='' width="100%" />
