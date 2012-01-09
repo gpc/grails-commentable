@@ -1,0 +1,27 @@
+<project xmlns='http://maven.apache.org/POM/4.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd'>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.grails.plugins</groupId>
+  <artifactId>commentable</artifactId>
+  <packaging>zip</packaging>
+  <version>0.7.6</version>
+  <name>Commentable Plugin</name>
+  <description>Adds support for comments. Mark up any of your domain classes as having comments and then use the tag library and partial templates to integrate comments into your views.</description>
+  <url>http://grails.org/Commentable+Plugin</url>
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Graeme Rocher</name>
+      <email>graeme.rocher@springsource.com</email>
+    </developer>
+  </developers>
+  <issueManagement>
+    <system>JIRA</system>
+    <url>http://jira.grails.org/browse/GPCOMMENTABLE</url>
+  </issueManagement>
+  <dependencies />
+</project>
