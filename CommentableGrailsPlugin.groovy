@@ -16,31 +16,29 @@ import org.grails.comments.*
 import grails.util.*
 
 class CommentableGrailsPlugin {
-    // the plugin version
-    def version = "0.7.5"
-    // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "1.1 > *"
-    // the other plugins this plugin depends on
-    def dependsOn = [hibernate:"1.1 > *"]
-    // resources that are excluded from plugin packaging
-    def pluginExcludes = [
-            "grails-app/views/test/index.gsp",
-            "grails-app/views/error.gsp",
-            "grails-app/controllers/TestController.groovy",
+	def version = "0.7.6"
+	def grailsVersion = "1.1 > *"
+	def loadAfter = ["hibernate"]
+
+	def pluginExcludes = [
+			"grails-app/views/test/index.gsp",
+			"grails-app/views/error.gsp",
+			"grails-app/controllers/TestController.groovy",
 			"grails-app/domain/org/grails/comments/TestPoster.groovy",
-			"grails-app/domain/org/grails/comments/TestEntry.groovy"			
-    ]
-    def author = "Graeme Rocher"
-    def authorEmail = "graeme.rocher@springsource.com"
-    def title = "Commentable Plugin"
-    def description = """\
+			"grails-app/domain/org/grails/comments/TestEntry.groovy"
+	]
+
+	def author = "Graeme Rocher"
+	def authorEmail = "graeme.rocher@springsource.com"
+	def title = "Commentable Plugin"
+	def description = """\
 Adds support for comments. Mark up any of your domain classes as having comments and \
 then use the tag library and partial templates to integrate comments into your views."""
 
-    // URL to the plugin's documentation
-    def documentation = "http://grails.org/Commentable+Plugin"
-    def license = "APACHE"
-    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPCOMMENTABLE" ]
+	// URL to the plugin's documentation
+	def documentation = "http://grails.org/Commentable+Plugin"
+	def license = "APACHE"
+	def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPCOMMENTABLE" ]
 
 	def doWithSpring = {
 		def config = application.config
@@ -49,7 +47,8 @@ then use the tag library and partial templates to integrate comments into your v
 			config.grails.commentable.poster.evaluator = { request.user }
 		}
 	}
-    def doWithDynamicMethods = { ctx ->
+
+	def doWithDynamicMethods = { ctx ->
 		for(domainClass in application.domainClasses) {
 			if(Commentable.class.isAssignableFrom(domainClass.clazz)) {
 				domainClass.clazz.metaClass {
@@ -58,7 +57,7 @@ then use the tag library and partial templates to integrate comments into your v
 							def clazz = delegate
 							CommentLink.withCriteria {
 								projections { property "comment" }
-								eq 'type',GrailsNameUtils.getPropertyName(clazz)								
+								eq 'type',GrailsNameUtils.getPropertyName(clazz)
 								maxResults 5
 								cache true
 								comment {
@@ -84,7 +83,7 @@ then use the tag library and partial templates to integrate comments into your v
 						def link = new CommentLink(comment:c, commentRef:delegate.id, type:GrailsNameUtils.getPropertyName(delegate.class))
 						link.save()
 						try {
-						    delegate.onAddComment(c)
+							delegate.onAddComment(c)
 						} catch (MissingMethodException e) {}
 						return delegate
 					}
@@ -99,7 +98,7 @@ then use the tag library and partial templates to integrate comments into your v
 								eq "commentRef", instance.id
 								eq 'type', GrailsNameUtils.getPropertyName(instance.class)
 								cache true
-							}							
+							}
 						} else {
 							return Collections.EMPTY_LIST
 						}
@@ -115,10 +114,10 @@ then use the tag library and partial templates to integrate comments into your v
 								eq "commentRef", instance.id
 								eq 'type', GrailsNameUtils.getPropertyName(instance.class)
 								cache true
-							}							
+							}
 						} else {
 							return 0
-						}						
+						}
 					}
 					
 					removeComment { Comment c ->
@@ -133,6 +132,6 @@ then use the tag library and partial templates to integrate comments into your v
 				}
 			}
 		}
-    }
+	}
 
 }
