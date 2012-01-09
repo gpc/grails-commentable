@@ -33,12 +33,14 @@ class CommentableGrailsPlugin {
     def author = "Graeme Rocher"
     def authorEmail = "graeme.rocher@springsource.com"
     def title = "Commentable Plugin"
-    def description = '''\\
-A plugin that allows you to attach comments to domain classes in a generic manner
-'''
+    def description = """\
+Adds support for comments. Mark up any of your domain classes as having comments and \
+then use the tag library and partial templates to integrate comments into your views."""
 
     // URL to the plugin's documentation
     def documentation = "http://grails.org/Commentable+Plugin"
+    def license = "APACHE"
+    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPCOMMENTABLE" ]
 
 	def doWithSpring = {
 		def config = application.config
