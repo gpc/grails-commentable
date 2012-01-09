@@ -1,0 +1,7 @@
+.settings/
+*Db.log
+*Db.properties
+grails-commentable-*.zip*
+plugin.xml
+stacktrace.log
+target/
