@@ -22,7 +22,7 @@
 		</g:else>
 	</div>
 	<div class="commentDetails">
-		<g:formatDate format="MMM dd, yyyy HH:MM a" date="${comment.dateCreated}"/>
+		<g:formatDate format="MMM dd, yyyy HH:mm a" date="${comment.dateCreated}"/>
 		${comment?.poster}		
 	</div>	
 </div>
