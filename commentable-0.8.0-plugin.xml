@@ -1,4 +1,4 @@
-<plugin name='commentable' version='0.7.7' grailsVersion='1.1 &gt; *'>
+<plugin name='commentable' version='0.8.0' grailsVersion='1.1 &gt; *'>
   <author>Graeme Rocher</author>
   <authorEmail>graeme.rocher@springsource.com</authorEmail>
   <title>Commentable Plugin</title>
@@ -6,7 +6,6 @@
   <documentation>http://grails.org/Commentable+Plugin</documentation>
   <type>CommentableGrailsPlugin</type>
   <resources>
-    <resource>TestController</resource>
     <resource>org.grails.comments.CommentableController</resource>
     <resource>org.grails.comments.Comment</resource>
     <resource>org.grails.comments.CommentLink</resource>
