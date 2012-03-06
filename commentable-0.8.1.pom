@@ -3,7 +3,7 @@
   <groupId>org.grails.plugins</groupId>
   <artifactId>commentable</artifactId>
   <packaging>zip</packaging>
-  <version>0.8.0</version>
+  <version>0.8.1</version>
   <name>Commentable Plugin</name>
   <description>Adds support for comments. Mark up any of your domain classes as having comments and then use the tag library and partial templates to integrate comments into your views.</description>
   <url>http://grails.org/Commentable+Plugin</url>
