@@ -46,19 +46,21 @@ class CommentableController {
             log.error "Error posting comment: ${e.message}"
         }
 
-        def comments = CommentLink.withCriteria {
-            projections {
-                property "comment"
-            }
-            eq 'type', commentLink.type
-            eq 'commentRef', commentLink.commentRef
-            cache true
-        }
         if (request.xhr || params.async) {
+
+            def comments = CommentLink.withCriteria {
+                projections {
+                    property "comment"
+                }
+                eq 'type', commentLink.type
+                eq 'commentRef', commentLink.commentRef
+                cache true
+            }
+
             def noEscape = false
             plugin.isAvailable(name: 'grails-ui') { noEscape = true }
             render template: "/commentable/comment",
-				    plugin:"commentable",
+                    plugin: "commentable",
                     collection: comments,
                     var: "comment",
                     model: [noEscape: noEscape]
