@@ -16,7 +16,7 @@ import org.grails.comments.*
 import grails.util.*
 
 class CommentableGrailsPlugin {
-	def version = "0.8.1"
+	def version = "1.0.BUILD-SNAPSHOT"
 	def grailsVersion = "1.1 > *"
 	def loadAfter = ["hibernate"]
 
@@ -39,6 +39,7 @@ then use the tag library and partial templates to integrate comments into your v
 	def documentation = "http://grails.org/Commentable+Plugin"
 	def license = "APACHE"
 	def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPCOMMENTABLE" ]
+	def scm = [ url: "https://github.com/gpc/grails-commentable" ]
 
 	def doWithSpring = {
 		def config = application.config
