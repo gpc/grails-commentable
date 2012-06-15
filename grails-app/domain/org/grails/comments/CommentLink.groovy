@@ -14,7 +14,7 @@
  */
 package org.grails.comments
 
-class CommentLink {
+class CommentLink implements Serializable {
 
 	static belongsTo = [comment:Comment]
 	
