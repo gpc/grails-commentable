@@ -17,6 +17,7 @@ package org.grails.comments
 class Comment {
 
 	String body
+	String title
 	Date dateCreated
 	Date lastUpdated
 	Long posterId
@@ -46,11 +47,12 @@ class Comment {
 	
 	static constraints = {
 		body blank:false
+		title size: 5..40, blank:false
 		posterClass blank:false
 		posterId min:0L
 	}
 	
-	static searchable = [only:'body']
+	static searchable = [only: ['body', 'title']]
 	static mapping = {
 		body type:"text"
 		cache true
