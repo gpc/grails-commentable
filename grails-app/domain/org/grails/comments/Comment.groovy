@@ -14,7 +14,7 @@
  */
 package org.grails.comments
 
-class Comment {
+class Comment implements Serializable {
 
 	String body
 	String title
