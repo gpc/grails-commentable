@@ -99,7 +99,7 @@ class CommentableController {
         }
 
         if (!poster) {
-            throw new CommentException("No [grails.commentable.poster.evaluator] setting defined or the evaluator doesn't evaluate to an entity. Please define the evaluator correctly in grails-app/conf/Config.groovy or ensure commenting is secured via your security rules")
+            throw new CommentException("No [grails.commentable.poster.evaluator] setting defined or the evaluator doesn't evaluate to an entity. Please define the evaluator correctly in grails-app/conf/application.groovy or ensure commenting is secured via your security rules")
         }
         if (!poster.id) {
             throw new CommentException("The evaluated Comment poster is not a persistent instance.")

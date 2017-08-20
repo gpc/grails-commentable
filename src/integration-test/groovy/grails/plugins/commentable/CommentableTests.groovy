@@ -14,135 +14,141 @@
  */
 package grails.plugins.commentable
 
-import grails.test.*
-/* TODO
-class CommentableTests extends GrailsUnitTestCase {
-    protected void setUp() {
-        super.setUp()
+import grails.testing.mixin.integration.Integration
+import grails.transaction.*
+import spock.lang.Specification
+
+@Integration
+@Rollback
+class CommentableTests extends Specification {
+
+    def setup() {
     }
 
-    protected void tearDown() {
-        super.tearDown()
+    def cleanup() {
     }
 
-	void testProxiedClassNames() {
-		def poster = new TestPoster(name:"fred")
-		poster.save()
+    void "test Proxied Class Names"() {
+        given:
+            def poster = new TestPoster(name:"fred")
+            poster.save()
 
-		def c = new Comment(body:"test", posterId:poster.id, posterClass:"org.grails.comments.TestPoster_\$\$_javassist_7")
-		
-		assertNotNull c.poster
-		assertEquals poster.id, c.poster.id
-	}
-    void testAddComment() {
-		def poster = new TestPoster(name:"fred")
-		poster.save()
-		
-		def entry = new TestEntry(title:"The Entry")
-		shouldFail(CommentException) {
-			entry.addComment(poster, "My comment")			
-		}
-
-		entry.save()
-		
-		entry.addComment poster, "My comment"
-		
-		assertEquals 1, entry.comments.size()
-		assertEquals 1, entry.totalComments
-		
-		def c = entry.comments[0]
-		
-		assertEquals "My comment", c.body
-		assertEquals poster, c.poster
+            def c = new Comment(body:"test", posterId:poster.id, posterClass:"grails.plugins.commentable.TestPoster_\$\$_javassist_7")
+        expect:
+            c.poster
+            poster.id == c.poster.id
     }
 
-	void testRemoveComment() {
-		def poster = new TestPoster(name:"fred")
-		poster.save()
-		
-		def entry = new TestEntry(title:"The Entry")
-		shouldFail(CommentException) {
-			entry.addComment(poster, "My comment")			
-		}
+    void "test Add Comment"() {
+        given:
+            def poster = new TestPoster(name:"fred")
+            poster.save()
+            def entry = new TestEntry(title:"The Entry")
+        when:
+            entry.addComment(poster, "My comment") 
+        then:
+            thrown CommentException
+        when:
+            entry.save()
+            entry.addComment poster, "My comment"
+        then:
+            1 == entry.comments.size()
+            1 == entry.totalComments
+        when:
+            def c = entry.comments[0]
+        then:
+            "My comment" == c.body && poster == c.poster
+    }
 
-		entry.save()
-		
-		entry.addComment poster, "My comment"
-		
-		assertEquals 1, entry.comments.size()
-		
-		def c = entry.comments[0]
-		
-		assertEquals "My comment", c.body
-		assertEquals poster, c.poster		
-		
-		entry.removeComment(c)
-		
-		assertEquals 0, entry.comments.size()		
-	}
-	
-	void testFindAllByPoster() {
-		def poster = new TestPoster(name:"fred")
-		poster.save()
+    void "test Remove Comment"() {
+        given:
+            def poster = new TestPoster(name:"fred")
+            poster.save()
+            def entry = new TestEntry(title:"The Entry")
+        when:
+            entry.addComment(poster, "My comment") 
+        then:
+            thrown CommentException
+        when:
+            entry.save()
+            entry.addComment poster, "My comment"
+        then:
+            1 == entry.comments.size()
+            1 == entry.totalComments
+        when:
+            def c = entry.comments[0]
+        then:
+            "My comment" == c.body
+            poster == c.poster     
+        when:
+            entry.removeComment(c)
+        then:
+            0 == entry.comments.size()       
+    }
+    
+    void "test Find All By Poster"() {
+        given:
+            def poster = new TestPoster(name:"fred")
+            poster.save()
+            def entry = new TestEntry(title:"The Entry")
+        when:
+            entry.addComment(poster, "My comment") 
+        then:
+            thrown CommentException
+        when:
+            entry.save()
+            entry.addComment poster, "My comment"
+        then:
+            1 == entry.comments.size()
+            1 == entry.totalComments
+        when:
+            def comments = Comment.findAllByPoster(poster)      
+        then:
+            1 == comments.size()
+            1 == Comment.countByPoster(poster)
+    }
 
-		def entry = new TestEntry(title:"The Entry")
-		shouldFail(CommentException) {
-			entry.addComment(poster, "My comment")			
-		}
+    void "test Get Recent Comments"() {
+        given:
+            def poster = new TestPoster(name:"fred")
+            poster.save()
+            def entry = new TestEntry(title:"The Entry")
+        when:
+            entry.addComment(poster, "My comment") 
+        then:
+            thrown CommentException
+        when:
+            entry.save()
 
-		entry.save()
+            entry.addComment poster, "one"
+            entry.addComment poster, "two"
+            entry.addComment poster, "three"                
+        then:
+            3 == entry.comments.size()
+        when:
+            def recent = TestEntry.recentComments
+        then:
+            3 == recent.size()
+            "three" == recent[0].body
+    }
 
-		entry.addComment poster, "My comment"
-
-		assertEquals 1, entry.comments.size()
-		
-		def comments = Comment.findAllByPoster(poster)		
-		
-		assertEquals 1, comments.size()
-		
-		assertEquals 1, Comment.countByPoster(poster)
-	}
-	
-	void testGetRecentComments() {
-		def poster = new TestPoster(name:"fred")
-		poster.save()
-
-		def entry = new TestEntry(title:"The Entry")
-		shouldFail(CommentException) {
-			entry.addComment(poster, "My comment")			
-		}
-
-		entry.save()
-
-		entry.addComment poster, "one"
-		entry.addComment poster, "two"
-		entry.addComment poster, "three"				
-
-		assertEquals 3, entry.comments.size()
-		
-		def recent = TestEntry.recentComments
-		assertEquals 3, recent.size()
-		assertEquals "three", recent[0].body
-	}
-
-    void testOnAddComment() {
-        def poster = new TestPoster(name:"fred")
-		poster.save()
-
-		def entry = new TestEntry(title:"The Entry")
-		
-		def onAddCommentCalled = false
-		entry.metaClass.onAddComment = { comment -> 
-		    onAddCommentCalled = true
-		    assertEquals poster, comment.poster
-		    assertEquals "My comment", comment.body
-		}
+    void "test On Add Comment"() {
+        given:
+            def poster = new TestPoster(name:"fred")
+            poster.save()
+            def entry = new TestEntry(title:"The Entry")
+        when:
+            def onAddCommentCalled = false
+            entry.metaClass.onAddComment = { comment -> 
+                onAddCommentCalled = true
+                poster == comment.poster
+                "My comment" == comment.body
+            }
         
-		entry.save()
+            entry.save()
 
-		entry.addComment poster, "My comment"
-
-        assertTrue "onAddComment() was never called", onAddCommentCalled
+            entry.addComment poster, "My comment"
+        then: "onAddComment() was never called"
+            onAddCommentCalled 
     }
 }
-*/
