@@ -9,31 +9,25 @@
 <div id="addComment" class="addComment">
 	<h2 class="addCommentTitle">
 		<a href="#commentEditor" onclick="document.getElementById('addCommentContainer').style.display='';">
-				<g:message code="comment.add.title" default="Post a Comment"></g:message>
+			<g:message code="comment.add.title" default="Post a Comment"></g:message>
 		</a>
 	</h2>
 	<div id="addCommentContainer" class="addCommentContainer" style="display:none;">
-		<div class="addCommentTitle">
-			<g:message code="comment.add.title" default="Title"></g:message>
+		<div class="addCommentDescription">
+			<g:message code="comment.add.description" default=""></g:message>
 		</div>
 		<a name="commentEditor"></a>
 		<g:formRemote name="addCommentForm" url="[controller:'commentable',action:'add']" update="comments">
 			<plugin:isAvailable name="grails-ui">
-				<gui:richEditor id='commentTitle' name="comment.title" value='' width="30%" />
-				<gui:richEditor id='commentBody' name="comment.body" value='' width="70%" />
+				<gui:richEditor id='commentBody' name="comment.body" value='' width="100%" />
 			</plugin:isAvailable>
 			<plugin:isNotAvailable name="grails-ui">
-				<g:textField id="commentTitle" name="comment.title" /> <br />
-				<div class="addCommentMessage">
-					<g:message code="comment.add.message" default="Message"></g:message>
-				</div>
 				<g:textArea id="commentBody" name="comment.body" /> <br />
 			</plugin:isNotAvailable>
 			<g:hiddenField name="update" value="comments" />			
 			<g:hiddenField name="commentLink.commentRef" value="${commentable.id}" />
 			<g:hiddenField name="commentLink.type" value="${commentable.class.name}" />			
-			<g:hiddenField name="commentPageURI" value="${grailsApplication.config.grails.commentable.remove.context ? request.forwardURI : 
-				request.forwardURI.substring(grailsApplication.config.grails.commentable.remove.context.toString().toInteger())}"></g:hiddenField>
+			<g:hiddenField name="commentPageURI" value="${request.forwardURI}" />
 			<g:submitButton name="${g.message(code:'comment.post.button.name', 
 											 'default':'Post')}"></g:submitButton>
 		</g:formRemote>

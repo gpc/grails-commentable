@@ -4,4 +4,5 @@
 grails-commentable-*.zip*
 plugin.xml
 stacktrace.log
-target/
+build/
+.DS_Store
